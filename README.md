@@ -64,14 +64,14 @@ node app
 
 
 ```javascript
-  require([依存ライブラリ名], function(ライブラリに対応する変数名){
+require([依存ライブラリ名], function(ライブラリに対応する変数名){
     /*  実行したい処理 */
-  })
+})
 ```
 
   以下にBackboneJSやjQueryなどを利用した例を記載します。
 
-```javascript:main.js
+```javascript
 'use strict';
 
 requirejs.config({
@@ -107,7 +107,7 @@ require(['jquery', 'bootstrap', 'app'],
 );
 ```
   
-##### 2). 各モジュールに依存するライブラリを指定する
+##### 2). 各モジュールに依存するライブラリを指定する  
 
   自分で開発したモジュールをrequire.jsで読み込みたい場合は、  
   main.jsで呼び出すか、main.jsに呼び出されるモジュール内で依存ライブラリとして登録します。
@@ -121,17 +121,17 @@ require(['jquery', 'bootstrap', 'app'],
   returnで関数名を指定することで、利用できるようになります。
   
 ```javascript
-  define([依存ライブラリ名], function(ライブラリに対応する変数名){
-    
+define([依存ライブラリ名], function(ライブラリに対応する変数名){
+
     var publicFunction = function(){
-      /* 実行したい処理 */
+        /* 実行したい処理 */
     }
     
     return {
-      // 外部から呼び出す関数やオブジェクトを定義する
-      "publicFunction": "publicFunction"
+        // 外部から呼び出す関数やオブジェクトを定義する
+        "publicFunction": "publicFunction"
     }
-  })
+})
 ```
   
 
@@ -146,7 +146,7 @@ require(['jquery', 'bootstrap', 'app'],
   これでrequire.jsによってJavaScriptファイルが非同期で呼び出されます。
   
   
-  細かい設定などについては、(公式サイト)[http://requirejs.org/]を参照してください。
+  細かい設定などについては、[公式サイト](http://requirejs.org/)を参照してください。
   
   
 
@@ -161,7 +161,7 @@ require(['jquery', 'bootstrap', 'app'],
   ビルド設定ファイルでは、ベースとなるディレクトリや、require.jsで利用する  
   依存関係記載ファイル(main.js)や出力ファイル名などを指定します。
 
-```javascript:build.js
+```javascript
 ({
   baseUrl: "js",
   mainConfigFile: "js/main.js",
@@ -185,6 +185,6 @@ cd public
 r.js -o build.js
 ```
 
-  こちらについても、詳細な設定については(公式サイト)[http://requirejs.org/]を参照してください。
+  こちらについても、詳細な設定については[公式サイト](http://requirejs.org/)を参照してください。
   
 
