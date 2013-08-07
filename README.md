@@ -62,12 +62,49 @@ node app
   main.jsの最後で以下のように記載してJavaScriptの処理を実行します。
 
 
-```
+```javascript
   require([依存ライブラリ名], function(ライブラリに対応する変数名){
     /*  実行したい処理 */
   })
 ```
 
+  以下にBackboneJSやjQueryなどを利用した例を記載します。
+
+```javascript:main.js
+'use strict';
+
+requirejs.config({
+  paths: {
+    'jquery': [
+      '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min',
+      //If the CDN location fails, load from this location
+      'lib/jquery-1.9.1.min'
+    ],
+    'bootstrap'     : 'lib/bootstrap.min',
+    'underscore'    : 'lib/underscore-min',
+    'backbone'      : 'lib/backbone-min',
+    'userModel'     : 'models/user',
+    'userCollection': 'models/userCollection',
+    'userView'      : 'views/userView',
+    'app'           : 'app'
+  },
+
+  shim: {
+    'bootstrap'     : { deps: ['jquery'] },
+    'backbone'      : { deps: ['underscore'] },
+    'userModel'     : { deps: ['backbone'] },
+    'userCollection': { deps: ['userModel'] },
+    'userView'      : { deps: ['jquery'] },
+    'app'           : { deps: ['backbone'] }
+  }
+});
+
+require(['jquery', 'bootstrap', 'app'],
+    function($, bootstrap, app) {
+      window.App = new app.create();
+    }
+);
+```
   
 ##### 2). 各モジュールに依存するライブラリを指定する
 
@@ -79,10 +116,10 @@ node app
   後者の場合は、以下のようにdefine()を使って依存ライブラリに指定します。
   このプロジェクトでは"public/js/modules/alerts.js"がこれにあたります。
 
-　また、外部から呼び出したい関数やオブジェクトについては、ファイルの最後に  
-  returnを使って返してあげます。
+  また、外部から呼び出したい関数やオブジェクトについては、ファイルの最後に  
+  returnで関数名を指定することで、利用できるようになります。
   
-```
+```javascript
   define([依存ライブラリ名], function(ライブラリに対応する変数名){
     
     var publicFunction = function(){
@@ -102,10 +139,13 @@ node app
   HTMLへの登録は、require.jsのみをscriptタグで指定します。
   require.jsで読み込む依存関係記載ファイル(main.js)を"data-main"属性で指定します。
   
+```html
+<script data-main='/js/main' src='/js/require.js'></script>
+```
   これでrequire.jsによってJavaScriptファイルが非同期で呼び出されます。
   
   
-　細かい設定などについては、公式サイトを参照してください。
+  細かい設定などについては、公式サイトを参照してください。
   
   
 
@@ -119,7 +159,20 @@ node app
 
   ビルド設定ファイルでは、ベースとなるディレクトリや、require.jsで利用する  
   依存関係記載ファイル(main.js)や出力ファイル名などを指定します。
-  このプロジェクトでは、"public/build.js"にあたります。
+
+```javascript:build.js
+({
+  baseUrl: "js",
+  mainConfigFile: "js/main.js",
+  include: ["requireLib"],
+  paths: {
+    "jquery": "empty:",
+    "requireLib": "require"
+  },
+  name: "main",
+  out: "js/main.min.js",
+})
+```
 
 
 ##### 2). r.jsを実行する
@@ -133,3 +186,4 @@ r.js -o build.js
 
   こちらについても、詳細な設定については公式サイトを参照してください。
   
+
